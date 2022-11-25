@@ -6,4 +6,4 @@ BASE_URL = "https://bnr.bg/hristobotev/radioteatre/list?forceFullVersion=1"
 
 if __name__ == '__main__':
 	crawler = Crawler(BASE_URL)
-	# crawler.run()
+	crawler.run()

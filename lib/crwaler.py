@@ -1,7 +1,13 @@
 import requests
 import os
 
-from constants import DATA_PATH
+try:
+	# when run 'crawler.py':
+	from constants import DATA_PATH
+except:
+	# when run 'app.py'
+	from lib.constants import DATA_PATH
+
 
 
 class Crawler():
@@ -13,6 +19,7 @@ class Crawler():
 				:param filename: string
 				:param content: sring
 		"""
+
 		with open(DATA_PATH+filename, 'w') as f:
 			f.write(content)
 
@@ -24,8 +31,13 @@ class Crawler():
 			:param url: string
 		"""
 		r = requests.get(url)
+
+		# print(f'#####: {r.apparent_encoding}')
+
 		if r.ok:
+			# TODO: check encoding problem
 			# r.encoding = 'windows-1251'
+			print(r.text)
 			return r.text;
 
 
@@ -36,7 +48,7 @@ class Crawler():
 		"""
 		for url in self.seed:
 			html = self.get_html(url)
-			self.write_to_file('mobile.bg.html', html)
+			self.write_to_file('bnr.bg.html', html)
 
 
 		print('Crowler finish its job!')
@@ -44,4 +56,3 @@ class Crawler():
 if __name__ == '__main__':
 	crawler = Crawler("https://bnr.bg/hristobotev/radioteatre/list?forceFullVersion=1")
 	crawler.run()
-
