@@ -1,5 +1,8 @@
 import requests
 import os
+from bs4 import BeautifulSoup
+import re
+
 
 try:
 	# when run 'crawler.py':
@@ -35,11 +38,25 @@ class Crawler():
 		# print(f'#####: {r.apparent_encoding}')
 
 		if r.ok:
-			# TODO: check encoding problem
-			# r.encoding = 'windows-1251'
-			print(r.text)
 			return r.text;
 
+	def scrape_links(self, html):
+		links = list()
+
+		soup = BeautifulSoup(html,'html.parser')
+		module_1_1 = soup.find(id='module_1_1')
+		divs = module_1_1.find_all('div',class_="row-fluid")
+		for div in divs:
+			date = div.find('div', class_="date")
+			# print(date.text)
+			a = div.find('a')
+			# print(a['href'])
+			links.append(a['href'])
+
+		return links
+
+	def get_page_data(self, urls):
+		print(urls)
 
 	def run(self):
 		""" run the crawler for each url in seed
@@ -48,11 +65,12 @@ class Crawler():
 		"""
 		for url in self.seed:
 			html = self.get_html(url)
-			self.write_to_file('bnr.bg.html', html)
+			# self.write_to_file('bnr.bg.html', html)
+			links = self.scrape_links(html)
+			main_url = 'https://bnr.bg/'
+			urls = [ main_url+el  for el in links]
+			print(urls)
 
 
 		print('Crowler finish its job!')
 
-if __name__ == '__main__':
-	crawler = Crawler("https://bnr.bg/hristobotev/radioteatre/list?forceFullVersion=1")
-	crawler.run()
