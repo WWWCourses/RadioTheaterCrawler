@@ -1,5 +1,9 @@
 import mysql.connector as mc
-from bnr.read_config import read_db_config
+
+try:
+	from lib.read_config import read_db_config
+except:
+	from read_config import read_db_config
 
 class DB():
 	def __init__(self):
@@ -39,16 +43,13 @@ class DB():
 			cursor.execute(sql)
 			self.conn.commit()
 
-	def insert_rows(self, rows_data):
-		sql = """
-			INSERT IGNORE INTO radiotheaters
-			(title, pub_date, content)
-			VALUES ( %s, %s, %s)
-		"""
+	def truncate_radiotheaters_table(self):
+		sql = "truncate radiotheaters";
 
 		with self.conn.cursor() as cursor:
-			cursor.executemany(sql, rows_data)
+			cursor.execute(sql)
 			self.conn.commit()
+
 
 	def insert_row(self, row_data):
 		sql = """
@@ -58,7 +59,7 @@ class DB():
 		"""
 
 		with self.conn.cursor(prepared=True) as cursor:
-			cursor.execute(sql, tuple(row_data.values()))
+			cursor.execute(sql, row_data)
 			self.conn.commit()
 
 	def select_all_data(self):
@@ -94,5 +95,5 @@ if __name__ == '__main__':
 	db = DB()
 
 	# db.get_column_names()
-	res = db.get_last_updated_date()
+	res = db.select_all_data()
 	print(res)
