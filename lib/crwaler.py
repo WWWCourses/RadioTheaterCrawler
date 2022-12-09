@@ -86,7 +86,6 @@ class Crawler():
 		else:
 			return datetime.datetime.strptime('30.01.1990', '%d.%m.%y')
 
-
 	def get_seed(self):
 		page_links = []
 
@@ -114,7 +113,6 @@ class Crawler():
 			self.seed = [ *self.seed, *page_links]
 			self.current_page+=1
 			self.get_seed()
-
 
 	def get_page_data(self, html):
 		soup = BeautifulSoup(html, 'html.parser')

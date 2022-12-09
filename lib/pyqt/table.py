@@ -61,12 +61,19 @@ class TableView(qtw.QTableView):
 		model = qtg.QStandardItemModel()
 		model.setHorizontalHeaderLabels(self.column_names)
 
+			# [
+			# 	['title1', dateobj,'....']
+			# ]
+
 		for i, row in enumerate(self.data):
+
 			# items = [qtg.QStandardItem(str(item)) for item in row]
 
 			items = []
 			for field in row:
+
 				item = qtg.QStandardItem()
+
 				if isinstance(field, datetime.date):
 					field = field.strftime('%d.%m.%Y')
 				elif isinstance(field, str) and len(field)>100:
